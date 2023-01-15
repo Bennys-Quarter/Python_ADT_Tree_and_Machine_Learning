@@ -25,9 +25,9 @@ def dataset_cleanup(X):
     return X
 
 
-def decision_tree_classifier(X,Y):
+def decision_tree_classifier(X, Y, criterion):
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, random_state=0, test_size=0.3)
-    clf = DecisionTreeClassifier(random_state=0, max_depth=2)
+    clf = DecisionTreeClassifier(random_state=0, max_depth=2, criterion=criterion)
     clf.fit(X_train, Y_train)
     return clf, X_train, X_test, Y_train, Y_test
 
@@ -129,11 +129,18 @@ def main():
     X = stats.zscore(X)
     X = np.nan_to_num(X)
 
-    # Decision Tree AI
-    dt_clf, X_train, X_test, Y_train, Y_test = decision_tree_classifier(X, Y)
+    # Decision Tree AI with CART
+    #dt_clf, X_train, X_test, Y_train, Y_test = decision_tree_classifier(X, Y, criterion='gini')
+    #cm = performance_evaluation(dt_clf, X_train=X_train, X_test=X_test, Y_train=Y_train, Y_test=Y_test, uniques=uniques)
+    #find_the_10_most_important_features(dt_clf)
+    #plot_decision_tree_and_confusion_matrix(dt_clf, uniques, cm)
+
+    # Decision Tree AI with ID3
+    dt_clf, X_train, X_test, Y_train, Y_test = decision_tree_classifier(X, Y, criterion='entropy')
     cm = performance_evaluation(dt_clf, X_train=X_train, X_test=X_test, Y_train=Y_train, Y_test=Y_test, uniques=uniques)
     find_the_10_most_important_features(dt_clf)
     plot_decision_tree_and_confusion_matrix(dt_clf, uniques, cm)
+
 
 if __name__ == "__main__":
     main()
